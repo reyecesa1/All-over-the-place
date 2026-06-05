@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <title>All Over the Place — Cesar's wandering mind · mobile chests</title>
+    <title>All Over the Place — Cesar's wandering mind · welcome chest</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <style>
@@ -23,14 +23,12 @@
             line-height: 1.45;
         }
 
-        /* main container */
         .blog-container {
             max-width: 1300px;
             margin: 0 auto;
             padding: 1.2rem 1rem 2.5rem;
         }
 
-        /* header */
         .blog-header {
             text-align: center;
             margin-bottom: 2rem;
@@ -72,7 +70,6 @@
             margin-top: 8px;
         }
 
-        /* improved grid – MOBILE FIRST: single column on narrow screens, then 2 columns */
         .chest-bank {
             display: grid;
             grid-template-columns: 1fr;
@@ -80,7 +77,6 @@
             margin: 2rem 0 1.5rem;
         }
 
-        /* chest card – touch friendly */
         .chest-card {
             background: linear-gradient(145deg, #bd8a4a, #a5723e);
             border-radius: 20px 20px 24px 24px;
@@ -99,9 +95,7 @@
         }
         .chest-card:active {
             transform: scale(0.98);
-            transition: transform 0.05s;
         }
-        /* minecraft lid effect */
         .chest-card::before {
             content: "";
             position: absolute;
@@ -170,7 +164,6 @@
             font-size: 0.9rem;
         }
 
-        /* enhanced add button + search area (mobile stack) */
         .search-area {
             display: flex;
             justify-content: space-between;
@@ -231,10 +224,8 @@
         }
         .add-button:active {
             transform: scale(0.96);
-            background: #3a2a1e;
         }
 
-        /* ----- MODAL (touch optimized) ----- */
         .modal {
             display: none;
             position: fixed;
@@ -335,7 +326,7 @@
             font-family: 'Inter', sans-serif;
             background: white;
             margin: 8px 0;
-            font-size: 16px;  /* prevents zoom on focus iOS */
+            font-size: 16px;
         }
         label {
             font-weight: 600;
@@ -344,7 +335,6 @@
             display: block;
             color: #5a3f28;
         }
-
         .footer-note {
             margin-top: 2.2rem;
             text-align: center;
@@ -353,8 +343,6 @@
             border-top: 1px dashed #dbc8ae;
             padding-top: 1.2rem;
         }
-
-        /* tablet & desktop */
         @media (min-width: 520px) {
             .chest-bank {
                 grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
@@ -367,8 +355,6 @@
                 font-size: 3rem;
             }
         }
-
-        /* MOBILE specific refinements (<=480px) */
         @media (max-width: 500px) {
             .search-area {
                 flex-direction: column;
@@ -407,20 +393,8 @@
                 flex: 1;
                 justify-content: center;
             }
-            .chest-title {
-                font-size: 0.85rem;
-                padding: 0.25rem 0.6rem;
-            }
-            .chest-icon {
-                font-size: 2rem;
-            }
         }
-
-        /* extra small (<=380px) fine-tune */
         @media (max-width: 380px) {
-            .chest-card {
-                padding: 0.7rem 0.3rem 0.7rem;
-            }
             .chest-title {
                 font-size: 0.8rem;
                 white-space: normal;
@@ -428,8 +402,6 @@
                 max-width: 100%;
             }
         }
-
-        /* touch + accessibility */
         button, .chest-card, .modal-btn {
             cursor: pointer;
             touch-action: manipulation;
@@ -437,14 +409,6 @@
         input:focus, textarea:focus {
             outline: 2px solid #c9a86b;
             outline-offset: 2px;
-        }
-        ::-webkit-scrollbar {
-            width: 5px;
-            background: #eedbc4;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #bc8f54;
-            border-radius: 10px;
         }
     </style>
 </head>
@@ -465,7 +429,6 @@
         <button class="add-button" id="openAddModalBtn"><i class="fas fa-plus-circle"></i> Plant a new page</button>
     </div>
 
-    <!-- CHEST BANK (grid) -->
     <div id="chestGrid" class="chest-bank">
         <div class="empty-chest"><i class="fas fa-cube"></i> the bank is empty — click "Plant a new page" to start your collection ✨</div>
     </div>
@@ -474,7 +437,7 @@
     </div>
 </div>
 
-<!-- MODAL: View/Edit/Delete Post -->
+<!-- MODALS: View, Add, Edit -->
 <div id="postModal" class="modal">
     <div class="modal-card">
         <div class="modal-header">
@@ -489,7 +452,6 @@
     </div>
 </div>
 
-<!-- MODAL: Add new post -->
 <div id="addModal" class="modal">
     <div class="modal-card">
         <div class="modal-header">
@@ -511,7 +473,6 @@
     </div>
 </div>
 
-<!-- EDIT MODAL -->
 <div id="editModal" class="modal">
     <div class="modal-card">
         <div class="modal-header">
@@ -534,34 +495,63 @@
 </div>
 
 <script>
-    // ----- DATA MODEL ------
     let blogPosts = [];
 
-    function loadSamplePosts() {
+    // ---------- WELCOME CHEST (first & pinned) ----------
+    const WELCOME_CHEST = {
+        id: "welcome_root_001",
+        title: "📌 Welcome to the wandering chest — read me first",
+        content: `Hey friend 👋
+
+This is my little corner of the internet: "All Over the Place". I'm Cesar, and I use this space to throw everything — AI studies, messy professional reflections, casual blog vibes, and half-baked creative experiments.
+
+✨ The rule is simple: no pressure, just curiosity.
+
+🗝️ What you'll find here:
+• Deep dives into AI, tech, and learning in public
+• Honest, raw entries about my creative journey
+• Professional studies (usually on desktop) AND playful / weird findings (especially on mobile)
+• A spot where YOU can add your own chests — completely anonymous. No login, no tracking. Just your words.
+
+🌱 Why the two faces?  
+What you see on mobile might not be the same as on a computer. And that's a feature. I use it to my advantage: on desktop I share more structured studies and professional notes; on mobile I dump curiosities, sketches, and spontaneous thoughts. It keeps the soul of this place weird and alive.
+
+✍️ You're invited:  
+Feel free to "plant a new page" — add your own chests. Write a study note, a poem, a strange question, or just a hello. It's anonymous, no signup, and everything lives in your browser's memory. Be creative, be kind, be curious.
+
+Now open the other chests and wander around. There's treasure in the chaos.
+
+— Cesar 🪶`,
+        date: "always here · first chest",
+        tag: "welcome · meta"
+    };
+
+    // sample posts (kept for flavor, welcome chest will be placed first)
+    function getSamplePosts() {
         return [
             {
-                id: "post1",
+                id: "post_ai_auth",
                 title: "On AI & Authenticity",
                 content: "I’ve been playing with AI models for months, and the real magic isn’t replacement—it’s augmentation. My thoughts: keep the human spark. Write weird, raw, and unpolished. That's where the soul lives. Also, yesterday i realised that curiosity beats perfection every single time. 🤖✨",
                 date: new Date(2025, 3, 12).toLocaleDateString(),
                 tag: "reflection"
             },
             {
-                id: "post2",
+                id: "post_minecraft",
                 title: "Why Minecraft Chests?",
                 content: "Minecraft chests feel like hope containers. Every time you open one, it might hold treasure or just a cobblestone. That's exactly how a blog should feel: an archive of possibility. I want this place to be a wooden chest labyrinth. No pressure, just discovery.",
                 date: new Date(2025, 2, 28).toLocaleDateString(),
                 tag: "design"
             },
             {
-                id: "post3",
+                id: "post_learning",
                 title: "Study: Learning in Public",
                 content: "I've been sharing everything i learn — from startup fails to small wins. Turns out vulnerability is the superpower. People resonate with the messy middle. So here i'll drop study notes, half-baked theories, and weird sketches. Join the chaos. 📓",
                 date: new Date(2025, 1, 5).toLocaleDateString(),
                 tag: "study"
             },
             {
-                id: "post4",
+                id: "post_procgen",
                 title: "Curiosity Log: Procedural Generation",
                 content: "Been deep into noise functions and random generation for my games. 'The Little Hiker' terrain was made with Perlin. It's beautiful that computers can create infinite worlds from math — but the human curation is what makes it feel alive. next: biome blending notes.",
                 date: new Date(2025, 4, 1).toLocaleDateString(),
@@ -574,15 +564,36 @@
         localStorage.setItem("all_over_the_place_posts", JSON.stringify(blogPosts));
     }
 
+    // Ensures the welcome chest always exists and is the FIRST element (pinned)
+    function ensureWelcomeChest() {
+        const hasWelcome = blogPosts.some(post => post.id === WELCOME_CHEST.id);
+        if (!hasWelcome) {
+            blogPosts.unshift(WELCOME_CHEST);
+            saveToLocalStorage();
+        } else {
+            // If welcome exists but not at index 0, move it to front (keep it pinned)
+            const welcomeIndex = blogPosts.findIndex(p => p.id === WELCOME_CHEST.id);
+            if (welcomeIndex !== 0) {
+                const [welcomePost] = blogPosts.splice(welcomeIndex, 1);
+                blogPosts.unshift(welcomePost);
+                saveToLocalStorage();
+            }
+        }
+    }
+
     function loadFromLocalStorage() {
         const stored = localStorage.getItem("all_over_the_place_posts");
         if (stored) {
             blogPosts = JSON.parse(stored);
+            // backwards compatibility: ensure each post has tag field
             blogPosts = blogPosts.map(p => ({ ...p, tag: p.tag || "curiosity" }));
         } else {
-            blogPosts = loadSamplePosts();
+            // first time visitor: load sample posts, then add welcome chest on top
+            blogPosts = getSamplePosts();
             saveToLocalStorage();
         }
+        // always ensure welcome chest exists and is pinned first
+        ensureWelcomeChest();
     }
 
     let currentFilter = "";
@@ -590,13 +601,11 @@
 
     function escapeHtml(str) {
         if (!str) return '';
-        return str.replace(/[&<>]/g, function(m){
-            if(m==='&') return '&amp;';
-            if(m==='<') return '&lt;';
-            if(m==='>') return '&gt;';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
             return m;
-        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-            return c;
         });
     }
 
@@ -629,30 +638,31 @@
         });
     }
 
-    let currentlyViewingPost = null;
     function openPostModal(postId) {
         const post = blogPosts.find(p => p.id === postId);
         if (!post) return;
-        currentlyViewingPost = post;
         const modalBody = document.getElementById("modalBodyContent");
         modalBody.innerHTML = `
             <h4 style="font-family: Playfair Display; font-size: 1.5rem; margin-bottom: 0.2rem;">${escapeHtml(post.title)}</h4>
             <div class="blog-date"><i class="far fa-calendar-alt"></i> ${post.date || "unknown date"}  ${post.tag ? ` · 🏷️ ${escapeHtml(post.tag)}` : ''}</div>
             <div class="blog-content">${escapeHtml(post.content).replace(/\n/g, '<br>')}</div>
         `;
-        const modal = document.getElementById("postModal");
-        modal.style.display = "flex";
+        document.getElementById("postModal").style.display = "flex";
         currentOpenPostId = postId;
     }
 
     function closePostModal() {
         document.getElementById("postModal").style.display = "none";
         currentOpenPostId = null;
-        currentlyViewingPost = null;
     }
 
     function deleteCurrentPost() {
         if (!currentOpenPostId) return;
+        const postToDelete = blogPosts.find(p => p.id === currentOpenPostId);
+        if (postToDelete && postToDelete.id === WELCOME_CHEST.id) {
+            alert("✨ The welcome chest is the heart of this space — it can't be buried. Feel free to add your own chests around it!");
+            return;
+        }
         if (confirm("⚠️ Bury this chest forever? It will disappear from the bank.")) {
             blogPosts = blogPosts.filter(p => p.id !== currentOpenPostId);
             saveToLocalStorage();
@@ -673,7 +683,10 @@
         closePostModal();
     }
 
-    function closeEditModal() { document.getElementById("editModal").style.display = "none"; editingPostId = null; }
+    function closeEditModal() { 
+        document.getElementById("editModal").style.display = "none"; 
+        editingPostId = null; 
+    }
 
     function saveEditedPost() {
         if (!editingPostId) return;
@@ -712,8 +725,10 @@
             date: new Date().toLocaleDateString(),
             tag: tag || "field note"
         };
-        blogPosts.unshift(newPost);
+        blogPosts.unshift(newPost); // newest first, but welcome chest will remain on top due to ensureWelcomeChest after?
+        // we must re-ensure welcome chest remains first after insertion (welcome moves to top)
         saveToLocalStorage();
+        ensureWelcomeChest(); // this will reorder and put welcome at index0 if needed
         document.getElementById("newTitle").value = "";
         document.getElementById("newContent").value = "";
         document.getElementById("newTag").value = "";
@@ -724,25 +739,22 @@
     function openAddModal() { document.getElementById("addModal").style.display = "flex"; }
     function closeAddModal() { document.getElementById("addModal").style.display = "none"; }
 
-    // search handler
+    // Event listeners
     const searchInput = document.getElementById("searchInput");
     searchInput.addEventListener("input", (e) => {
         currentFilter = e.target.value;
         renderChestGrid();
     });
 
-    // event binding
     document.getElementById("openAddModalBtn").addEventListener("click", openAddModal);
     document.getElementById("closeAddModalBtn").addEventListener("click", closeAddModal);
     document.getElementById("cancelAddBtn").addEventListener("click", closeAddModal);
     document.getElementById("saveNewPostBtn").addEventListener("click", addNewPost);
-    
     document.getElementById("closeModalBtn").addEventListener("click", closePostModal);
     document.getElementById("deletePostBtn").addEventListener("click", deleteCurrentPost);
     document.getElementById("editPostBtn").addEventListener("click", () => {
         if (currentOpenPostId) openEditModal(currentOpenPostId);
     });
-    
     document.getElementById("closeEditModalBtn").addEventListener("click", closeEditModal);
     document.getElementById("cancelEditBtn").addEventListener("click", closeEditModal);
     document.getElementById("confirmEditBtn").addEventListener("click", saveEditedPost);
